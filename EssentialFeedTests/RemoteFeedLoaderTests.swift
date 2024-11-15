@@ -81,14 +81,14 @@ private extension RemoteFeedLoaderTests {
         file: StaticString = #file,
         line: UInt = #line
     ) {
-        var capturedError: [RemoteFeedLoader.Error] = []
-        sut.load { error in
-            capturedError.append(error)
+        var capturedResults: [RemoteFeedLoader.Result] = []
+        sut.load { result in
+            capturedResults.append(result)
         }
         
         action()
         
-        XCTAssertEqual(capturedError, [error], file: file, line: line)
+        XCTAssertEqual(capturedResults, [.failure(error)], file: file, line: line)
     }
     
     class HTTPClientSpy: HTTPClient {

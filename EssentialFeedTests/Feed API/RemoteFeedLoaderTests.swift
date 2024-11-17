@@ -108,7 +108,7 @@ private extension RemoteFeedLoaderTests {
     
     func makeSUT(
         url: URL = URL(string: "https://any-url.com")!,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) -> (sut: RemoteFeedLoader, client: HTTPClientSpy) {
         let client = HTTPClientSpy()
@@ -142,7 +142,7 @@ private extension RemoteFeedLoaderTests {
         _ sut: RemoteFeedLoader,
         toCompleteWith expectedResult: RemoteFeedLoader.Result,
         when action: @escaping () -> Void,
-        file: StaticString = #file,
+        file: StaticString = #filePath,
         line: UInt = #line
     ) {
         let exp = expectation(description: "Wait for load completion.")

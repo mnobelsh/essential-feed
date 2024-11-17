@@ -26,9 +26,17 @@ final class URLSessionHTTPClient {
 
 final class URLSessionHTTPClientTests: XCTestCase {
     
-    func test_getFromURL_performsGETRequestsWithURL() {
+    override func setUp() {
+        super.setUp()
         URLProtocolStub.startInterceptingRequests()
-        
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+        URLProtocolStub.stopInterceptingRequests()
+    }
+    
+    func test_getFromURL_performsGETRequestsWithURL() {
         let url = URL(string: "https://any-url.com")!
         let sut = URLSessionHTTPClient()
         
@@ -42,13 +50,9 @@ final class URLSessionHTTPClientTests: XCTestCase {
         sut.get(from: url) { _ in }
         
         wait(for: [exp], timeout: 1)
-        
-        URLProtocolStub.stopInterceptingRequests()
     }
     
     func test_getFromURL_failsOnRequestError() {
-        URLProtocolStub.startInterceptingRequests()
-        
         let url = URL(string: "https://any-url.com")!
         let error = NSError(domain: "Any Error", code: 0)
         let sut = URLSessionHTTPClient()
@@ -67,8 +71,6 @@ final class URLSessionHTTPClientTests: XCTestCase {
         }
         
         wait(for: [exp], timeout: 1)
-        
-        URLProtocolStub.stopInterceptingRequests()
     }
 
 }

@@ -37,6 +37,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FF5B03B62CE7C2E700A3D421 /* Feed API */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Feed API"; sourceTree = "<group>"; };
+		FFBEDAAA2CEA46D200B3CE9E /* Helpers */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Helpers; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +108,7 @@
 		FFBEDA9F2CEA2B0C00B3CE9E /* Feed API */ = {
 			isa = PBXGroup;
 			children = (
+				FFBEDAAA2CEA46D200B3CE9E /* Helpers */,
 				FF5B03B42CE7BD5A00A3D421 /* RemoteFeedLoaderTests.swift */,
 				FFBEDAA82CEA38C100B3CE9E /* URLSessionHTTPClientTests.swift */,
 			);
@@ -159,6 +161,9 @@
 			);
 			dependencies = (
 				080EDEFD21B6DA7E00813479 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FFBEDAAA2CEA46D200B3CE9E /* Helpers */,
 			);
 			name = EssentialFeedTests;
 			productName = EssentialFeedTests;

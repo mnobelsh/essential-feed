@@ -8,8 +8,6 @@
 import Foundation
 
 final class FeedItemsMapper {
-    private init() {}
-    
     private static var OK_200: Int { 200 }
     
     private struct Root: Decodable {

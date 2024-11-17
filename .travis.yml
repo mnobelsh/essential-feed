@@ -1,0 +1,9 @@
+os: osx
+osx_image: xcode14.2
+language: swift
+env:
+  #environment variables
+  global:
+    - PROJECT_NAME="EssentialFeed.xcodeproj"
+    - SCHEME="CI"
+script: xcodebuild clean build test -project "$PROJECT_NAME" -scheme "$SCHEME" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO

@@ -12,10 +12,10 @@ final class EssentialFeedAPIEndToEndTests: XCTestCase {
 
     func test_endToEndTestServerGETFeedResult_matchesFixedTestsAccountData() {
         switch getFeedResult() {
-        case let .success(items):
-            XCTAssertEqual(items.count, 8, "Expected to receive 8 feed items.")
-            items.enumerated().forEach { index, item in
-                XCTAssertEqual(item, self.expectedItem(at: index))
+        case let .success(imageFeed):
+            XCTAssertEqual(imageFeed.count, 8, "Expected to receive 8 feed items.")
+            imageFeed.enumerated().forEach { index, image in
+                XCTAssertEqual(image, self.expectedImage(at: index))
             }
         case let .failure(error):
             XCTFail("Expected successful feed result, got \(error) instead.")
@@ -50,12 +50,12 @@ private extension EssentialFeedAPIEndToEndTests {
         return receivedResult
     }
     
-    func expectedItem(at index: Int) -> FeedItem {
-        return FeedItem(
+    func expectedImage(at index: Int) -> FeedImage {
+        return FeedImage(
             id: id(at: index),
             description: description(at: index),
             location: location(at: index),
-            imageURL: imageURL(at: index)
+            url: imageURL(at: index)
         )
     }
         

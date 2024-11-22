@@ -50,6 +50,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				CacheFeedUseCaseTests.swift,
+				FeedStoreSpy.swift,
 				LoadFeedFromCacheUseCaseTests.swift,
 			);
 			target = 080EDEF921B6DA7E00813479 /* EssentialFeedTests */;

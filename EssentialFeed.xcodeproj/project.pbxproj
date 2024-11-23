@@ -58,6 +58,7 @@
 			membershipExceptions = (
 				CacheFeedUseCaseTests.swift,
 				CodableFeedStoreTests.swift,
+				FeedStoreSpecs.swift,
 				Helpers/FeedCacheTestHelpers.swift,
 				Helpers/FeedStoreSpy.swift,
 				LoadFeedFromCacheUseCaseTests.swift,

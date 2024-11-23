@@ -139,14 +139,20 @@ final class CodableFeedStoreTests: XCTestCase {
         }
         
         let op3 = expectation(description: "Operation 3")
-        sut.deleteCachedFeed { _ in
+        sut.insert(uniqueImageFeed().local, timestamp: Date.now) { _ in
             completedOperations.append(op3)
             op3.fulfill()
         }
         
-        wait(for: [op1, op2, op3], timeout: 1)
+        let op4 = expectation(description: "Operation 4")
+        sut.retrieve { _ in
+            completedOperations.append(op4)
+            op4.fulfill()
+        }
         
-        XCTAssertEqual(completedOperations, [op1, op2, op3], "Expected side effects run serially.")
+        waitForExpectations(timeout: 1)
+        
+        XCTAssertEqual(completedOperations, [op1, op2, op3, op4], "Expected side effects run serially.")
     }
     
 }

@@ -46,11 +46,19 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FF2CDB702CF1E4FE00595CBA /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Helpers/FeedCacheTestHelpers.swift,
+			);
+			target = FFBEDABA2CEA741300B3CE9E /* EssentialFeedAPIEndToEndTests */;
+		};
 		FF68B2272CECFD9600AECA0C /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				CacheFeedUseCaseTests.swift,
-				FeedStoreSpy.swift,
+				Helpers/FeedCacheTestHelpers.swift,
+				Helpers/FeedStoreSpy.swift,
 				LoadFeedFromCacheUseCaseTests.swift,
 				ValidateFeedCacheUseCaseTests.swift,
 			);
@@ -59,6 +67,7 @@
 		FFBEDAC62CEA79D500B3CE9E /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				SharedTestHelpers.swift,
 				"XCTestCase+MemoryLeaksTracking.swift",
 			);
 			target = FFBEDABA2CEA741300B3CE9E /* EssentialFeedAPIEndToEndTests */;
@@ -67,7 +76,7 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FF5B03B62CE7C2E700A3D421 /* Feed API */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Feed API"; sourceTree = "<group>"; };
-		FF68B2242CECFD8100AECA0C /* Feed Cache */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF68B2272CECFD9600AECA0C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Feed Cache"; sourceTree = "<group>"; };
+		FF68B2242CECFD8100AECA0C /* Feed Cache */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FF68B2272CECFD9600AECA0C /* PBXFileSystemSynchronizedBuildFileExceptionSet */, FF2CDB702CF1E4FE00595CBA /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Feed Cache"; sourceTree = "<group>"; };
 		FF931B402CEFAEC900A04DB3 /* Feed Cache */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Feed Cache"; sourceTree = "<group>"; };
 		FFBEDAAA2CEA46D200B3CE9E /* Helpers */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (FFBEDAC62CEA79D500B3CE9E /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Helpers; sourceTree = "<group>"; };
 		FFBEDABC2CEA741300B3CE9E /* EssentialFeedAPIEndToEndTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = EssentialFeedAPIEndToEndTests; sourceTree = "<group>"; };

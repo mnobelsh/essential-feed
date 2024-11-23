@@ -61,6 +61,7 @@
 				FeedStoreSpecs.swift,
 				Helpers/FeedCacheTestHelpers.swift,
 				Helpers/FeedStoreSpy.swift,
+				"Helpers/XCTestCase+FeedStoreSpecs.swift",
 				LoadFeedFromCacheUseCaseTests.swift,
 				ValidateFeedCacheUseCaseTests.swift,
 			);

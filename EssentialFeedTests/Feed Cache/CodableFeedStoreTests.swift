@@ -41,7 +41,15 @@ final class CodableFeedStore {
     }
     
     func deleteCachedFeed(completion: @escaping FeedStore.DeletionCompletion) {
-        completion(nil)
+        guard FileManager.default.fileExists(atPath: storeURL.path()) else {
+            return completion(nil)
+        }
+        do {
+            try FileManager.default.removeItem(at: storeURL)
+            completion(nil)
+        } catch {
+            completion(error)
+        }
     }
     
     func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping FeedStore.InsertionCompletion) {
@@ -164,6 +172,18 @@ final class CodableFeedStoreTests: XCTestCase {
         
         expect(sut, toRetrieve: .empty)
     }
+    
+    func test_delete_emptiesPreviouslyInsertedCache() {
+        let sut = makeSUT()
+        
+        insert((uniqueImageFeed().local, Date.now), to: sut)
+        
+        let deletionError = deleteCache(from: sut)
+        XCTAssertNil(deletionError, "Expected successful deletion.")
+        
+        expect(sut, toRetrieve: .empty)
+    }
+
 
 }
 

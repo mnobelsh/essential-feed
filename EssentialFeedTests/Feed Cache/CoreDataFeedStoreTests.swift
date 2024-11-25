@@ -80,7 +80,36 @@ final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
     }
     
     func test_storeSideEffects_runSerially() {
+        let sut = makeSUT()
+        var completedOperations = [XCTestExpectation]()
         
+        let op1 = expectation(description: "Operation 1")
+        sut.insert(uniqueImageFeed().local, timestamp: Date.now) { _ in
+            completedOperations.append(op1)
+            op1.fulfill()
+        }
+        
+        let op2 = expectation(description: "Operation 2")
+        sut.deleteCachedFeed { _ in
+            completedOperations.append(op2)
+            op2.fulfill()
+        }
+        
+        let op3 = expectation(description: "Operation 3")
+        sut.insert(uniqueImageFeed().local, timestamp: Date.now) { _ in
+            completedOperations.append(op3)
+            op3.fulfill()
+        }
+        
+        let op4 = expectation(description: "Operation 4")
+        sut.retrieve { _ in
+            completedOperations.append(op4)
+            op4.fulfill()
+        }
+        
+        waitForExpectations(timeout: 1)
+        
+        XCTAssertEqual(completedOperations, [op1, op2, op3, op4], "Expected side effects run serially.")
     }
 
 }

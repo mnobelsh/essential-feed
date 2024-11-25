@@ -15,6 +15,11 @@ class ManagedCache: NSManagedObject {
 }
 
 extension ManagedCache {
+    static func newUniqueInstance(in context: NSManagedObjectContext) throws -> ManagedCache {
+        try ManagedCache.find(in: context).map(context.delete(_:))
+        return ManagedCache(context: context)
+    }
+    
     static func find(in context: NSManagedObjectContext) throws -> ManagedCache? {
         guard let entityName = entity().name else { return nil }
         let request = NSFetchRequest<ManagedCache>(entityName: entityName)

@@ -11,20 +11,20 @@ import EssentialFeed
 
 final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
     
-    func test_retrieve_deliversEmptyOnEmptyCache() {
-        let sut = makeSUT()
+    func test_retrieve_deliversEmptyOnEmptyCache() throws {
+        let sut = try makeSUT()
         
         expect(sut, toRetrieve: .empty)
     }
     
-    func test_retrieve_hasNoSideEffectsOnEmptyCache() {
-        let sut = makeSUT()
+    func test_retrieve_hasNoSideEffectsOnEmptyCache() throws {
+        let sut = try makeSUT()
         
         expect(sut, toRetrieveTwice: .empty)
     }
     
-    func test_retrieveAfterInsertingFromEmptyCache_deliversInsertedValues() {
-        let sut = makeSUT()
+    func test_retrieveAfterInsertingFromEmptyCache_deliversInsertedValues() throws {
+        let sut = try makeSUT()
         let feed = uniqueImageFeed().local
         let timestamp = Date.now
         
@@ -33,8 +33,8 @@ final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
         expect(sut, toRetrieve: .found(feed: feed, timestamp: timestamp))
     }
     
-    func test_retrieve_hasNoSideEffectsOnNonEmptyCache() {
-        let sut = makeSUT()
+    func test_retrieve_hasNoSideEffectsOnNonEmptyCache() throws {
+        let sut = try makeSUT()
         let feed = uniqueImageFeed().local
         let timestamp = Date.now
         
@@ -43,8 +43,8 @@ final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
         expect(sut, toRetrieveTwice: .found(feed: feed, timestamp: timestamp))
     }
     
-    func test_insert_overridesPreviouslyInsertedCacheValues() {
-        let sut = makeSUT()
+    func test_insert_overridesPreviouslyInsertedCacheValues() throws {
+        let sut = try makeSUT()
         
         let previousFeed = uniqueImageFeed().local
         let previousTimestamp = Date.now
@@ -58,16 +58,16 @@ final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
         expect(sut, toRetrieve: .found(feed: latestFeed, timestamp: latestTimestamp))
     }
     
-    func test_delete_hasNoSideEffectsOnEmptyCache() {
-        let sut = makeSUT()
+    func test_delete_hasNoSideEffectsOnEmptyCache() throws {
+        let sut = try makeSUT()
         
         deleteCache(from: sut)
         
         expect(sut, toRetrieveTwice: .empty)
     }
     
-    func test_delete_emptiesPreviouslyInsertedCache() {
-        let sut = makeSUT()
+    func test_delete_emptiesPreviouslyInsertedCache() throws {
+        let sut = try makeSUT()
         let feed = uniqueImageFeed().local
         let timestamp = Date.now
         
@@ -79,8 +79,8 @@ final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
         expect(sut, toRetrieve: .empty)
     }
     
-    func test_storeSideEffects_runSerially() {
-        let sut = makeSUT()
+    func test_storeSideEffects_runSerially() throws {
+        let sut = try makeSUT()
         var completedOperations = [XCTestExpectation]()
         
         let op1 = expectation(description: "Operation 1")
@@ -115,10 +115,10 @@ final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
 }
 
 private extension CoreDataFeedStoreTests {
-    func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
+    func makeSUT(file: StaticString = #filePath, line: UInt = #line) throws -> FeedStore {
         let bundle = Bundle(for: CoreDataFeedStore.self)
         let url = URL(fileURLWithPath: "/dev/null")
-        let sut = try! CoreDataFeedStore(storeURL: url, bundle: bundle)
+        let sut = try CoreDataFeedStore(storeURL: url, bundle: bundle)
         trackForMemoryLeaks(sut, file: file, line: line)
         return sut
     }

@@ -6,17 +6,17 @@
 //
 
 protocol FeedStoreSpecs {
-    func test_retrieve_deliversEmptyOnEmptyCache()
-    func test_retrieve_hasNoSideEffectsOnEmptyCache()
-    func test_retrieveAfterInsertingFromEmptyCache_deliversInsertedValues()
-    func test_retrieve_hasNoSideEffectsOnNonEmptyCache()
+    func test_retrieve_deliversEmptyOnEmptyCache() throws
+    func test_retrieve_hasNoSideEffectsOnEmptyCache() throws
+    func test_retrieveAfterInsertingFromEmptyCache_deliversInsertedValues() throws
+    func test_retrieve_hasNoSideEffectsOnNonEmptyCache() throws
     
-    func test_insert_overridesPreviouslyInsertedCacheValues()
+    func test_insert_overridesPreviouslyInsertedCacheValues() throws
     
-    func test_delete_hasNoSideEffectsOnEmptyCache()
-    func test_delete_emptiesPreviouslyInsertedCache()
+    func test_delete_hasNoSideEffectsOnEmptyCache() throws
+    func test_delete_emptiesPreviouslyInsertedCache() throws
     
-    func test_storeSideEffects_runSerially()
+    func test_storeSideEffects_runSerially() throws
 }
 
 protocol FailableRetrieveFeedStoreSpecs: FeedStoreSpecs {

@@ -9,23 +9,13 @@ import Foundation
 import CoreData
 
 public final class CoreDataFeedStore: FeedStore {
+    static let modelName: String = "FeedStore"
+    
     private let container: NSPersistentContainer
     private let context: NSManagedObjectContext
     
     public init(storeURL: URL, bundle: Bundle) throws {
-        guard let managedObjectModel = bundle.url(forResource: "FeedStore", withExtension: "momd")
-            .flatMap ({ NSManagedObjectModel(contentsOf: $0) }) else {
-            throw NSError(domain: "CoreDataFeedStore", code: 0)
-        }
-        let persistentStoreDescription = NSPersistentStoreDescription(url: storeURL)
-        
-        container = NSPersistentContainer(name: "FeedStore", managedObjectModel: managedObjectModel)
-        container.persistentStoreDescriptions = [persistentStoreDescription]
-        
-        var loadError: Error?
-        container.loadPersistentStores { loadError = $1 }
-        try loadError.map { throw $0 }
-        
+        container = try NSPersistentContainer.load(modelName: CoreDataFeedStore.modelName, url: storeURL, bundle: bundle)
         context = container.newBackgroundContext()
     }
     

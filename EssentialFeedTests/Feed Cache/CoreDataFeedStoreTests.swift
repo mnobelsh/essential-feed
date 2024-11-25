@@ -25,7 +25,7 @@ final class CoreDataFeedStore: FeedStore {
 final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
     
     func test_retrieve_deliversEmptyOnEmptyCache() {
-        let sut = CoreDataFeedStore()
+        let sut = makeSUT()
         
         expect(sut, toRetrieve: .empty)
     }
@@ -58,4 +58,12 @@ final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
         
     }
 
+}
+
+private extension CoreDataFeedStoreTests {
+    func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> FeedStore {
+        let sut = CoreDataFeedStore()
+        trackForMemoryLeaks(sut, file: file, line: line)
+        return sut
+    }
 }

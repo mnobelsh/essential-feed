@@ -67,7 +67,16 @@ final class CoreDataFeedStoreTests: XCTestCase, FeedStoreSpecs {
     }
     
     func test_delete_emptiesPreviouslyInsertedCache() {
+        let sut = makeSUT()
+        let feed = uniqueImageFeed().local
+        let timestamp = Date.now
         
+        let insertionError = insert((feed, timestamp), to: sut)
+        XCTAssertNil(insertionError, "Expected successful insertion.")
+        
+        deleteCache(from: sut)
+        
+        expect(sut, toRetrieve: .empty)
     }
     
     func test_storeSideEffects_runSerially() {

@@ -29,6 +29,7 @@ final class EssentialFeedCacheIntegrationTests: XCTestCase {
 
 }
 
+// MARK: - Helpers
 private extension EssentialFeedCacheIntegrationTests {
     func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> LocalFeedLoader {
         let bundle = Bundle(for: CoreDataFeedStore.self)

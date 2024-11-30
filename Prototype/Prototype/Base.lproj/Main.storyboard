@@ -27,7 +27,7 @@
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="565" id="fXB-Nb-yX1">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="FeedImageCell" rowHeight="565" id="fXB-Nb-yX1" customClass="FeedImageCell" customModule="Prototype" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="66" width="393" height="565"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fXB-Nb-yX1" id="Y0b-rv-Y2B">
@@ -60,7 +60,7 @@ Location</string>
                                                 <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TEx-Zp-Nwa" userLabel="Image Container">
                                                     <rect key="frame" x="0.0" y="53.333333333333314" width="353" height="353"/>
                                                     <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XoU-iI-o3E">
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="XoU-iI-o3E">
                                                             <rect key="frame" x="0.0" y="0.0" width="353" height="353"/>
                                                         </imageView>
                                                     </subviews>
@@ -98,6 +98,12 @@ Location</string>
                                         <constraint firstAttribute="trailingMargin" secondItem="G0I-tV-6SJ" secondAttribute="trailing" id="t0S-Mt-vUQ"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="descriptionLabel" destination="V2u-Zu-Qb5" id="JpZ-v8-oTX"/>
+                                    <outlet property="feedImageView" destination="XoU-iI-o3E" id="EXb-Ku-fr2"/>
+                                    <outlet property="locationContainer" destination="aY9-ta-n4S" id="ohH-iZ-ke7"/>
+                                    <outlet property="locationLabel" destination="Xst-jp-G2W" id="YQF-N6-GBv"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

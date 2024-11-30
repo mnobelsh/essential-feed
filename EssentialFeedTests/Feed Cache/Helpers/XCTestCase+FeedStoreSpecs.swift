@@ -14,13 +14,13 @@ extension FeedStoreSpecs where Self: XCTestCase {
         
         sut.retrieve { receivedResult in
             switch (receivedResult, expectedResult) {
-            case (.success(.empty), .success(.empty)),
+            case (.success(.none), .success(.none)),
                 (.failure,.failure):
                 break
                 
-            case let (.success(.found(receivedFeed, receivedTimestamp)), .success(.found(expectedFeed, expectedTimestamp))):
-                XCTAssertEqual(receivedFeed, expectedFeed, file: file, line: line)
-                XCTAssertEqual(receivedTimestamp, expectedTimestamp, file: file, line: line)
+            case let (.success(receivedCache), .success(expectedCache)):
+                XCTAssertEqual(receivedCache?.feed, expectedCache?.feed, file: file, line: line)
+                XCTAssertEqual(receivedCache?.timestamp, expectedCache?.timestamp, file: file, line: line)
                 
             default:
                 XCTFail("Expected to retrieve \(expectedResult), got \(receivedResult) instead.", file: file, line: line)

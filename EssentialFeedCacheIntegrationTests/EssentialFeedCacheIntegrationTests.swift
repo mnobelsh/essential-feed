@@ -66,10 +66,15 @@ private extension EssentialFeedCacheIntegrationTests {
         return sut
     }
     
-    func save(_ feed: [FeedImage], with sut: LocalFeedLoader) {
+    func save(_ feed: [FeedImage], with sut: LocalFeedLoader, file: StaticString = #filePath, line: UInt = #line) {
         let saveExp = expectation(description: "Waiting for save completion.")
-        sut.save(feed) { error in
-            XCTAssertNil(error)
+        sut.save(feed) { result in
+            switch result {
+            case let .failure(error):
+                XCTFail("Expected successful operation, got \(error) instead", file: file, line: line)
+            default:
+                break
+            }
             saveExp.fulfill()
         }
         wait(for: [saveExp], timeout: 1)

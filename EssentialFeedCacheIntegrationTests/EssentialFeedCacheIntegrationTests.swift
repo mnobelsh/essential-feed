@@ -37,6 +37,20 @@ final class EssentialFeedCacheIntegrationTests: XCTestCase {
         
         expect(sutToPerformLoad, toLoad: feed)
     }
+    
+    func test_save_overridesItemsSavedOnASeparateInstance() {
+        let sutToPerformFirstSave = makeSUT()
+        let sutToPerformSecondSave = makeSUT()
+        let sutToPerformLoad = makeSUT()
+        let previousFeed = uniqueImageFeed().models
+        let latestFeed = uniqueImageFeed().models
+        
+        save(previousFeed, with: sutToPerformFirstSave)
+        
+        save(latestFeed, with: sutToPerformSecondSave)
+        
+        expect(sutToPerformLoad, toLoad: latestFeed)
+    }
 
 }
 

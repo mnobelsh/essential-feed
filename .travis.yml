@@ -4,6 +4,9 @@ language: swift
 env:
   #environment variables
   global:
-    - PROJECT_NAME="EssentialFeed.xcodeproj"
-    - SCHEME="CI"
-script: xcodebuild clean build test -project "$PROJECT_NAME" -scheme "$SCHEME" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
+    - PROJECT_NAME="EssentialFeed/EssentialFeed.xcodeproj"
+    - SCHEME_MACOS="CI_macOS"
+    - SCHEME_IOS="CI_iOS"
+script:
+    - xcodebuild clean build test -project "$PROJECT_NAME" -scheme "$SCHEME_MACOS" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk macosx -destination "platform=macOS" ONLY_ACTIVE_ARCH=YES
+    - xcodebuild clean build test -project "$PROJECT_NAME" -scheme "$SCHEME_IOS" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk iphonesimulator -destination "platform=iOS Simulator,OS=14.0,name=iPhone 16.0"

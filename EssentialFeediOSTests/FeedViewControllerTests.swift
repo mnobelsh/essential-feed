@@ -47,25 +47,14 @@ final class FeedViewController: UITableViewController {
 }
 
 final class FeedViewControllerTests: XCTestCase {
-
-    func test_init_doesNotLoadFeed() {
-        let (_, loader) = makeSUT()
+    
+    func test_loadFeedActions_requestFeedFromLoader() {
+        let (sut, loader) = makeSUT()
         
         XCTAssertEqual(loader.loadCallCount, 0)
-    }
-    
-    func test_viewDidLoad_loadsFeed() {
-        let (sut, loader) = makeSUT()
         
         sut.simulateAppearance()
-        
         XCTAssertEqual(loader.loadCallCount, 1)
-    }
-    
-    func test_userInitiatedFeedReload_loadsFeed() {
-        let (sut, loader) = makeSUT()
-        
-        sut.simulateAppearance()
         
         sut.simulateUserInitiateFeedReload()
         XCTAssertEqual(loader.loadCallCount, 2)
@@ -74,33 +63,19 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.loadCallCount, 3)
     }
     
-    func test_viewDidLoad_showsLoadingIndicator() {
-        let (sut, _) = makeSUT()
-        
-        sut.simulateAppearance()
-        
-        XCTAssertTrue(sut.isShowingLoadingIndicator)
-    }
-    
-    func test_userInitiatedFeedReload_showsLoadingIndicator() {
-        let (sut, _) = makeSUT()
-        
-        sut.simulateAppearance()
-        
-        sut.simulateUserInitiateFeedReload()
-        
-        XCTAssertTrue(sut.isShowingLoadingIndicator)
-    }
-    
-    func test_userInitiatedFeedReload_hidesLoadingIndicatorOnLoaderCompletion() {
+    func test_loadingFeedIndicator_isVisibleWhileLoadingFeed() {
         let (sut, loader) = makeSUT()
         
         sut.simulateAppearance()
+        XCTAssertTrue(sut.isShowingLoadingIndicator)
+        
+        loader.completeFeedLoading(at: 0)
+        XCTAssertFalse(sut.isShowingLoadingIndicator)
         
         sut.simulateUserInitiateFeedReload()
+        XCTAssertTrue(sut.isShowingLoadingIndicator)
         
-        loader.completeFeedLoading()
-        
+        loader.completeFeedLoading(at: 1)
         XCTAssertFalse(sut.isShowingLoadingIndicator)
     }
 

@@ -188,6 +188,28 @@ final class FeedViewControllerTests: XCTestCase {
         loader.completeImageLoading(with: invalidImageData0, at: 0)
         XCTAssertEqual(view0?.isShowingRetryAction, true)
     }
+    
+    func test_feedImageViewRetryAction_retriesImageLoad() {
+        let image0 = makeFeedImage(url: URL(string: "https://url-0.com")!)
+        let image1 = makeFeedImage(url: URL(string:"https://url-1.com")!)
+        let (sut, loader) = makeSUT()
+        
+        sut.simulateAppearance()
+        loader.completeFeedLoading(with: [image0, image1])
+        
+        let view0 = sut.simulateFeedImageViewVisible(at: 0)
+        let view1 = sut.simulateFeedImageViewVisible(at: 1)
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url])
+        
+        loader.completeImageLoading(with: anyNSError(), at: 0)
+        loader.completeImageLoading(with: anyNSError(), at: 1)
+        
+        view0?.simulateRetryAction()
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url, image0.url])
+        
+        view1?.simulateRetryAction()
+        XCTAssertEqual(loader.loadedImageURLs, [image0.url, image1.url, image0.url, image1.url])
+    }
 
 }
 
@@ -357,6 +379,20 @@ private extension FeedImageCell {
     var renderedImage: Data? { feedImageView.image?.pngData() }
     
     var isShowingRetryAction: Bool { !feedImageRetryButton.isHidden }
+    
+    func simulateRetryAction() {
+        feedImageRetryButton.simulateOnTap()
+    }
+}
+
+extension UIButton {
+    func simulateOnTap() {
+        allTargets.forEach { target in
+            actions(forTarget: target, forControlEvent: .touchUpInside)?.forEach{ action in
+                (target as NSObject).perform(Selector(action))
+            }
+        }
+    }
 }
 
 extension UIRefreshControl {

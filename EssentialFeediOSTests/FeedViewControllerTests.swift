@@ -41,6 +41,25 @@ final class FeedViewControllerTests: XCTestCase {
         loader.completeFeedLoading(at: 1)
         XCTAssertFalse(sut.isShowingLoadingIndicator)
     }
+    
+    func test_loadFeedCompletion_rendersSuccessfullyLoadedFeed() {
+        let image0 = makeFeedImage(description: "Description 0", location: "Location 0")
+        let image1 = makeFeedImage(description: "Description 1", location: "Location 1")
+        let image2 = makeFeedImage(description: "Description 2", location: "Location 2")
+        let image3 = makeFeedImage(description: "Description 3", location: "Location 3")
+        
+        let (sut, loader) = makeSUT()
+        
+        sut.simulateAppearance()
+        assertThat(sut, isRendering: [])
+        
+        loader.completeFeedLoading(with: [image0], at: 0)
+        assertThat(sut, isRendering: [image0])
+        
+        sut.simulateUserInitiateFeedReload()
+        loader.completeFeedLoading(with: [image0, image1, image2, image3], at: 1)
+        assertThat(sut, isRendering: [image0, image1, image2, image3])
+    }
 
 }
 
@@ -55,6 +74,32 @@ extension FeedViewControllerTests {
         return (sut, loader)
     }
     
+    func makeFeedImage(description: String? = nil, location: String? = nil) -> FeedImage {
+        FeedImage(id: UUID(), description: description, location: location, url: anyURL())
+    }
+    
+    func assertThat(_ sut: FeedViewController, hasViewConfiguredFor image: FeedImage, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+        let view = sut.feedImageView(at: index)
+        
+        guard let cell = view as? FeedImageCell else {
+            return XCTFail("Expected \(FeedImageCell.self) instance. got \(String(describing: view)) instead.", file: file, line: line)
+        }
+        
+        XCTAssertEqual(cell.isShowingLocation, image.location != nil, file: file, line: line)
+        XCTAssertEqual(cell.locationText, image.location, file: file, line: line)
+        XCTAssertEqual(cell.descriptionText, image.description, file: file, line: line)
+    }
+    
+    func assertThat(_ sut: FeedViewController, isRendering feed: [FeedImage], file: StaticString = #filePath, line: UInt = #line) {
+        guard sut.numberOfRenderedFeedImageViews() == feed.count else {
+            return XCTFail("Expected \(feed.count) images, got \(sut.numberOfRenderedFeedImageViews()) instead.", file: file, line: line)
+        }
+
+        feed.enumerated().forEach {
+            assertThat(sut, hasViewConfiguredFor: $1, at: $0, file: file, line: line)
+        }
+    }
+    
     class LoaderSpy: FeedLoader {
         private var completions = [(FeedLoader.Result) -> Void]()
         var loadCallCount: Int { completions.count }
@@ -63,20 +108,32 @@ extension FeedViewControllerTests {
             completions.append(completion)
         }
         
-        func completeFeedLoading(at index: Int = 0) {
-            completions[index](.success([]))
+        func completeFeedLoading(with feed: [FeedImage] = [], at index: Int = 0) {
+            completions[index](.success(feed))
         }
     }
     
 }
 
-extension FeedViewController {
+private extension FeedViewController {
     var isShowingLoadingIndicator: Bool {
         refreshControl?.isRefreshing == true
     }
     
+    var feedImageSection: Int { 0 }
+    
     func simulateUserInitiateFeedReload() {
         refreshControl?.simulatePullToRefresh()
+    }
+    
+    func numberOfRenderedFeedImageViews() -> Int {
+        tableView.numberOfRows(inSection: feedImageSection)
+    }
+    
+    func feedImageView(at row: Int) -> UITableViewCell? {
+        let dataSource = tableView.dataSource
+        let indexPath = IndexPath(row: row, section: feedImageSection)
+        return dataSource?.tableView(tableView, cellForRowAt: indexPath)
     }
     
     func simulateAppearance() {
@@ -113,6 +170,14 @@ extension FeedViewController {
             _isRefreshing = false
         }
     }
+}
+
+private extension FeedImageCell {
+    var isShowingLocation: Bool { !locationContainer.isHidden }
+    
+    var locationText: String? { locationLabel.text }
+    
+    var descriptionText: String? { descriptionLabel.text }
 }
 
 extension UIRefreshControl {

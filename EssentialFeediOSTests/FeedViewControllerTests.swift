@@ -131,6 +131,28 @@ final class FeedViewControllerTests: XCTestCase {
         XCTAssertEqual(view0?.isShowingImageLoadingIndicator, false)
         XCTAssertEqual(view1?.isShowingImageLoadingIndicator, false)
     }
+    
+    func test_feedImageView_rendersImageLoadedFromURL() {
+        let (sut, loader) = makeSUT()
+        
+        sut.simulateAppearance()
+        loader.completeFeedLoading(with: [makeFeedImage(), makeFeedImage()])
+        
+        let view0 = sut.simulateFeedImageViewVisible(at: 0)
+        let view1 = sut.simulateFeedImageViewVisible(at: 1)
+        XCTAssertEqual(view0?.renderedImage, .none)
+        XCTAssertEqual(view1?.renderedImage, .none)
+        
+        let imageData0 = UIImage.make(withColor: .red).pngData()!
+        loader.completeImageLoading(with: imageData0, at: 0)
+        XCTAssertEqual(view0?.renderedImage?.count, imageData0.count)
+        XCTAssertEqual(view1?.renderedImage, .none)
+        
+        let imageData1 = UIImage.make(withColor: .blue).pngData()!
+        loader.completeImageLoading(with: imageData1, at: 1)
+        XCTAssertEqual(view0?.renderedImage?.count, imageData0.count)
+        XCTAssertEqual(view1?.renderedImage?.count, imageData1.count)
+    }
 
 }
 
@@ -296,6 +318,8 @@ private extension FeedImageCell {
     var descriptionText: String? { descriptionLabel.text }
     
     var isShowingImageLoadingIndicator: Bool { feedImageContainer.isShimmering }
+    
+    var renderedImage: Data? { feedImageView.image?.pngData() }
 }
 
 extension UIRefreshControl {
@@ -308,4 +332,16 @@ extension UIRefreshControl {
         }
     }
     
+}
+
+private extension UIImage {
+    static func make(withColor color: UIColor) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: 50, height: 50))
+        return renderer.image { context in
+            let size = renderer.format.bounds.size
+            color.setFill()
+            let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+            context.fill(rect)
+        }
+    }
 }

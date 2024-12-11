@@ -9,9 +9,14 @@ import UIKit
 import EssentialFeed
 
 public final class FeedViewController: UITableViewController {
+    public var refreshController: FeedRefreshViewController?
     private var feedLoader: FeedLoader?
     private var imageLoader: FeedImageDataLoader?
-    private var tableModel = [FeedImage]()
+    private var tableModel = [FeedImage]() {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     private var dataLoaderTasks = [IndexPath: FeedImageDataLoaderTask]()
     
     private var onViewIsAppearing: ((_ vc: FeedViewController) -> Void)?
@@ -20,17 +25,22 @@ public final class FeedViewController: UITableViewController {
         self.init()
         self.feedLoader = feedLoader
         self.imageLoader = imageLoader
+        self.refreshController = FeedRefreshViewController(feedLoader: feedLoader)
     }
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.refreshControl = UIRefreshControl()
-        self.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        self.tableView.prefetchDataSource = self
+        tableView.prefetchDataSource = self
+        
+        refreshControl = refreshController?.view
+        refreshController?.onRefresh = { [weak self] feed in
+            guard let self else { return }
+            self.tableModel = feed
+        }
         
         onViewIsAppearing = { vc in
-            vc.refresh()
+            vc.refreshController?.refresh()
             vc.onViewIsAppearing = nil
         }
     }
@@ -39,19 +49,6 @@ public final class FeedViewController: UITableViewController {
         super.viewIsAppearing(animated)
         
         onViewIsAppearing?(self)
-    }
-    
-    @objc private func refresh() {
-        refreshControl?.beginRefreshing()
-        feedLoader?.load { [weak self] result in
-            guard let self else { return }
-            
-            if let feed = try? result.get() {
-                self.tableModel = feed
-                self.tableView.reloadData()
-            }
-            self.refreshControl?.endRefreshing()
-        }
     }
     
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

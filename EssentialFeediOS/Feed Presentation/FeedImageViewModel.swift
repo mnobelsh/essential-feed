@@ -9,6 +9,8 @@ import Foundation
 import EssentialFeed
 
 final class FeedImageViewModel<Image> {
+    typealias Observer<T> = (T) -> Void
+    
     private let model: FeedImage
     private let imageLoader: FeedImageDataLoader
     private let imageTransformer: (Data) -> Image?

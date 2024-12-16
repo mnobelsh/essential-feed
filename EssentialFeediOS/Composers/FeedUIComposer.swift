@@ -5,7 +5,7 @@
 //  Created by Muhammad Nobel Shidqi on 15/12/24.
 //
 
-import Foundation
+import UIKit
 import EssentialFeed
 
 public final class FeedUIComposer {
@@ -22,7 +22,10 @@ public final class FeedUIComposer {
     
     private static func adaptFeedToCellControllers(forwardingTo controller: FeedViewController, loader: FeedImageDataLoader) -> ([FeedImage]) -> Void {
         return  { [weak controller] feed in
-            controller?.tableModel = feed.map { FeedImageCellController(model: $0, imageLoader: loader) }
+            controller?.tableModel = feed.map {
+                let viewModel = FeedImageViewModel(model: $0, imageLoader: loader, imageTransformer: UIImage.init)
+                return FeedImageCellController(viewModel: viewModel)
+            }
         }
     }
     

@@ -5,6 +5,7 @@
 //  Created by Muhammad Nobel Shidqi on 18/12/24.
 //
 
+import Foundation
 
 struct FeedImageViewModel<Image> {
     let image: Image?
